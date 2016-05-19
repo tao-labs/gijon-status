@@ -101,7 +101,7 @@ function parseHero(hero, ID){
 	var magnitude = 0;
 	
 	var latest = moment($(hero).find("responsetime").first().attr('datetime')).endOf('hour');
-	suggestedmin = moment().subtract(12, 'hours');
+	var suggestedmin = moment().subtract(12, 'hours');
 	
 	
 	$(hero).find("responsetime").each(function(){
@@ -607,7 +607,6 @@ var statuses = { up: 0, down: 0, difficulties: 0, paused: 0, unchecked: 0}
 var averages = { daily: 0.0, weekly: 0.0, monthly: 0.0, quarterly: 0.0, alltime: 0.0}
 var weight = 0.0;
 
-var suggestedmin;
 
 $( document ).ready(function() {
 	console.log( "ready!" );
