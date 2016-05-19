@@ -101,7 +101,7 @@ function parseHero(hero, ID){
 	var magnitude = 0;
 	
 	var latest = moment($(hero).find("responsetime").first().attr('datetime')).endOf('hour');
-	var suggestedmin = moment(latest).subtract(1, 'days');
+	suggestedmin = moment(latest).subtract(12, 'hours');
 	
 	
 	$(hero).find("responsetime").each(function(){
@@ -246,7 +246,7 @@ function parseHero(hero, ID){
 						type: 'time',
 						position: "bottom",
 						time: {
-							min: moment().subtract(12,'hours'),
+							
 							// string/callback - By default, date objects are expected. You may use a pattern string from http://momentjs.com/docs/#/parsing/string-format/ to parse a time string format, or use a callback function that is passed the label, and must return a moment() instance.
 							parser: false,
 							
@@ -292,8 +292,7 @@ function parseHero(hero, ID){
 							autoSkip: true,
 							fontColor: '#d0d0d0',
 							maxRotation: 0,
-							min: moment().subtract(12,'hours'),
-							max: moment().add(12,'hours'),
+							min: suggestedmin,
 							//maxTicksLimit: 26,
 						}
 					}],
@@ -606,6 +605,8 @@ var statuses = { up: 0, down: 0, difficulties: 0, paused: 0, unchecked: 0}
 
 var averages = { daily: 0.0, weekly: 0.0, monthly: 0.0, quarterly: 0.0, alltime: 0.0}
 var weight = 0.0;
+
+var suggestedmin;
 
 $( document ).ready(function() {
 	console.log( "ready!" );
