@@ -100,6 +100,8 @@ function parseHero(hero, ID){
 	var lastResponse = 0;
 	var magnitude = 0;
 	
+	var latest = moment($(hero).find("responsetime").first().attr('datetime')).endOf('hour');
+	
 	$(hero).find("responsetime").each(function(){
 		/*html += '<h5>Response Time</h5>';
 		html += '<h6 class="boxed';
@@ -112,8 +114,10 @@ function parseHero(hero, ID){
 					y: $(this).attr('value')
 				});
 		
-		data2.labels.push(new Date($(this).attr('datetime')));
-		data2.datasets[0].data.push($(this).attr('value'));
+		if(latest.diff(moment($(this).attr('datetime')), 'days', true)<1.00){
+			data2.labels.push(new Date($(this).attr('datetime')));
+			data2.datasets[0].data.push($(this).attr('value'));
+		}
 		
 		if($(this).attr('value')>maxy){maxy = $(this).attr('value');}
 		if($(this).attr('value')<miny){miny = $(this).attr('value');}
@@ -244,13 +248,13 @@ function parseHero(hero, ID){
 							parser: false,
 							
 							// string - By default, unit will automatically be detected.  Override with 'week', 'month', 'year', etc. (see supported time measurements)
-							unit: 'minute',
+							unit: 'hour',
 
 							// Number - The number of steps of the above unit between ticks
-							unitStepSize: 120,
+							unitStepSize: 2,
 
 							// string - By default, no rounding is applied.  To round, set to a supported time unit eg. 'week', 'month', 'year', etc.
-							round: 'minute',
+							//round: 'minute',
 
 							// Moment js for each of the units. Replaces `displayFormat`
 							// To override, use a pattern string from http://momentjs.com/docs/#/displaying/format/
