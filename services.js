@@ -244,13 +244,13 @@ function parseHero(hero, ID){
 							parser: false,
 							
 							// string - By default, unit will automatically be detected.  Override with 'week', 'month', 'year', etc. (see supported time measurements)
-							unit: 'hour',
+							unit: 'minute',
 
 							// Number - The number of steps of the above unit between ticks
-							unitStepSize: 2,
+							unitStepSize: 120,
 
 							// string - By default, no rounding is applied.  To round, set to a supported time unit eg. 'week', 'month', 'year', etc.
-							//round: 'hour',
+							round: 'minute',
 
 							// Moment js for each of the units. Replaces `displayFormat`
 							// To override, use a pattern string from http://momentjs.com/docs/#/displaying/format/
@@ -284,7 +284,7 @@ function parseHero(hero, ID){
 							autoSkip: true,
 							fontColor: '#d0d0d0',
 							maxRotation: 0,
-							maxTicksLimit: 12,
+							//maxTicksLimit: 26,
 						}
 					}],
 					yAxes: [{
@@ -306,7 +306,7 @@ function parseHero(hero, ID){
 
 function getService(ID, Service, Count, CustomTime) {
      
-	var apiUrl = 'http://api.uptimerobot.com/getMonitors?logs=1&format=xml&responseTimes=1&responseTimesAverage=60&logsLimit=6&apiKey=' + Service.apikey;
+	var apiUrl = 'http://api.uptimerobot.com/getMonitors?logs=1&format=xml&responseTimes=1&responseTimesAverage=15&logsLimit=6&apiKey=' + Service.apikey;
 	 
 	if (CustomTime) {apiUrl += '&customUptimeRatio=' + CustomTime;}
 	 
@@ -360,7 +360,11 @@ function getService(ID, Service, Count, CustomTime) {
 					
 						html += '<i class="material-icons trigger">expand_more</i>';
 						
-						html += '<span class="name"><b>' + name + '</b> ' + Service.description + '</span>';
+						if($(this).attr('type')==1){
+							html += '<span class="name"><a href="' + $(this).attr('url') + '" title="Acceder"><b>' + name + '</a></b> ' + Service.description + '</span>';
+						}else{
+							html += '<span class="name"><b>' + name + '</b> ' + Service.description + '</span>';
+						}
 						
 						html += '<span class="component-status ' + direction + '">' + status + '<i class="material-icons">' + icon + '</i></span>';
 						
@@ -618,6 +622,7 @@ $( document ).ready(function() {
 	Chart.defaults.global.elements.line.borderWidth = 3;
 	Chart.defaults.global.elements.line.borderColor = "#ddd";
 	Chart.defaults.global.elements.line.borderJoinStyle = 'round';
+	Chart.defaults.global.elements.line.lineTension = 0;
 	Chart.defaults.global.elements.line.fill = false;
 	
 	//$("#maincontentcontainer").hide();
