@@ -272,7 +272,7 @@ function parseHero(hero, ID){
 								'year': 'YYYY', // 2015
 							},
 							
-							min: latest.subtract(1, 'days'),
+							min: moment(latest).subtract(1, 'days'),
 							
 							// Sets the display format used in tooltip generation
 							tooltipFormat: 'HH:mm - dddd DD/MM/YYYY',
