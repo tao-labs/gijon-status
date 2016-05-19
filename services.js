@@ -246,6 +246,7 @@ function parseHero(hero, ID){
 						type: 'time',
 						position: "bottom",
 						time: {
+							min: moment().subtract(12,'hours'),
 							// string/callback - By default, date objects are expected. You may use a pattern string from http://momentjs.com/docs/#/parsing/string-format/ to parse a time string format, or use a callback function that is passed the label, and must return a moment() instance.
 							parser: false,
 							
