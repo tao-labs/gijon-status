@@ -177,7 +177,7 @@ function parseHero(hero, ID){
 						
 		//Chart
 		bleed += '<div class="col span_1_of_1 chart">';
-		bleed += '<div><canvas width="600" height="100" id="chart-' + $(hero).attr('id') + '" ></canvas></div>';
+		bleed += '<div><canvas width="600" height="200" id="chart-' + $(hero).attr('id') + '" ></canvas></div>';
 		bleed += '</div>';
 		/*
 		bleed += '<div class="col span_1_of_4">';		
@@ -193,7 +193,6 @@ function parseHero(hero, ID){
 	//Add to the DOM	
 	//$("#maincontent .section").append(html);
 	$("h2.service-status").after(bleed);
-	
 	
 	//Draw chart
 	if(maxy>0){
@@ -248,7 +247,7 @@ function parseHero(hero, ID){
 							unit: 'hour',
 
 							// Number - The number of steps of the above unit between ticks
-							unitStepSize: 1,
+							unitStepSize: 2,
 
 							// string - By default, no rounding is applied.  To round, set to a supported time unit eg. 'week', 'month', 'year', etc.
 							//round: 'hour',
@@ -258,7 +257,8 @@ function parseHero(hero, ID){
 							displayFormats: {
 								'millisecond': 'SSS [ms]',
 								'second': 'h:mm:ss a', // 11:20:01 AM
-								'minute': 'h:mm:ss a', // 11:20:01 AM
+								//'minute': 'h:mm:ss a', // 11:20:01 AM
+								'minute': 'HH[:]mm',
 								//'hour': 'MMM D, hA', // Sept 4, 5PM
 								'hour': "HH[h]",
 								'day': 'll', // Sep 4 2015
@@ -284,6 +284,7 @@ function parseHero(hero, ID){
 							autoSkip: true,
 							fontColor: '#d0d0d0',
 							maxRotation: 0,
+							maxTicksLimit: 12,
 						}
 					}],
 					yAxes: [{
@@ -458,8 +459,11 @@ function getService(ID, Service, Count, CustomTime) {
 								
 								html += '<div class="component-inner-container color-secondary">';		
 								
-									html += '<i class="material-icons">schedule</i> ' + moment($(this).attr('datetime')).format('HH:mm - DD/MM/YYYY (dddd)'); 
-									html += '<span class="component-status ' + direction + '">' + status + ' <i class="material-icons">' + icon + '</i></span>';
+									//html += '<i class="material-icons">schedule</i> ' + moment($(this).attr('datetime')).format('HH:mm - DD/MM/YYYY (dddd)');
+									/*html += '<i class="material-icons">schedule</i> ' + moment($(this).attr('datetime')).calendar();
+									html += '<span class="component-status ' + direction + '">' + status + ' <i class="material-icons">' + icon + '</i></span>';*/
+									html += '<span class="component-event-status ' + direction + '"><i class="material-icons">' + icon + '</i> ' + status + '</span>';
+									html += '<span class="component-event-time ' + direction + '">' + moment($(this).attr('datetime')).calendar(); + '</span>'
 								
 								html += '</div>';
 							});
@@ -592,12 +596,16 @@ var weight = 0.0;
 $( document ).ready(function() {
 	console.log( "ready!" );
 	
-	moment.locale("es");
+	moment.locale("es",{
+	    calendar : {
+	        sameElse : 'LLLL'
+	    }
+	});
 	
 	Chart.defaults.global.legend.display = false;	
 	Chart.defaults.global.defaultFontFamily = 'TeleGroteskScreen';
 	Chart.defaults.global.animation.easing = 'easeInOutQuad';
-	Chart.defaults.globaldefaultColor = "#f0f0f0";
+	Chart.defaults.global.defaultColor = "#f0f0f0";
 	
 	Chart.defaults.global.elements.point.radius = 4;
 	Chart.defaults.global.elements.point.backgroundColor = "white";
