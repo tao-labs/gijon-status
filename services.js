@@ -271,6 +271,8 @@ function parseHero(hero, ID){
 								'quarter': '[Q]Q - YYYY', // Q3
 								'year': 'YYYY', // 2015
 							},
+							suggestedMin: latest.subtract(1, 'days'),
+							min: latest.subtract(1, 'days'),
 							
 							// Sets the display format used in tooltip generation
 							tooltipFormat: 'HH:mm - dddd DD/MM/YYYY',
@@ -288,7 +290,6 @@ function parseHero(hero, ID){
 							autoSkip: true,
 							fontColor: '#d0d0d0',
 							maxRotation: 0,
-							suggestedMin: latest.subtract(1, 'days'),
 							//maxTicksLimit: 26,
 						}
 					}],
