@@ -290,6 +290,8 @@ function parseHero(hero, ID){
 							autoSkip: true,
 							fontColor: '#d0d0d0',
 							maxRotation: 0,
+							min: suggestedmin,
+							suggestedMin: suggestedmin,
 							//maxTicksLimit: 26,
 						}
 					}],
