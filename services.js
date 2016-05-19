@@ -101,7 +101,7 @@ function parseHero(hero, ID){
 	var magnitude = 0;
 	
 	var latest = moment($(hero).find("responsetime").first().attr('datetime')).endOf('hour');
-	suggestedmin = latest.subtract(12, 'hours');
+	suggestedmin = moment().subtract(12, 'hours');
 	
 	
 	$(hero).find("responsetime").each(function(){
