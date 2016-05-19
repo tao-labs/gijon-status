@@ -192,7 +192,6 @@ function parseHero(hero, ID){
 	
 	//Add to the DOM	
 	//$("#maincontent .section").append(html);
-	console.log(bleed);
 	$("h2.service-status").after(bleed);
 	
 	
@@ -472,7 +471,7 @@ function getService(ID, Service, Count, CustomTime) {
 				html += '</div>';
 				
 				//Process Hero Monitor				
-				if(Service.ishero){ console.log("hero detected: " + Service.title); parseHero(this, ID)};
+				if(Service.ishero){ parseHero(this, ID)};
 								
 				//Add to the DOM	
 				$(".components-section .components-container").append(html);
