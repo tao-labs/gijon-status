@@ -470,7 +470,7 @@ function getService(ID, Service, Count, CustomTime) {
 				html += '</div>';
 				
 				//Process Hero Monitor				
-				if(Service.ishero){ parseHero(this, ID)};
+				if(Service.ishero){ console.log("hero detected: " + Service.title); parseHero(this, ID)};
 								
 				//Add to the DOM	
 				$(".components-section .components-container").append(html);
