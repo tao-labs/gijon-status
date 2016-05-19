@@ -277,7 +277,7 @@ function parseHero(hero, ID){
 							
 							// Sets the display format used in tooltip generation
 							tooltipFormat: 'HH:mm - dddd DD/MM/YYYY',
-							min: suggestedmin,
+							
 						},													
 						gridLines:{							
 							tickMarkLength: 10,
@@ -293,6 +293,7 @@ function parseHero(hero, ID){
 							fontColor: '#d0d0d0',
 							maxRotation: 0,
 							min: suggestedmin,
+							suggestedMin: suggestedmin,
 							//maxTicksLimit: 26,
 						}
 					}],
