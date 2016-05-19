@@ -101,8 +101,8 @@ function parseHero(hero, ID){
 	var magnitude = 0;
 	
 	var latest = moment($(hero).find("responsetime").first().attr('datetime')).endOf('hour');
-	var suggestedmin = moment(latest).subtract(1, 'days').toDate();
-	console.log(suggestedmin);
+	var suggestedmin = moment(latest).subtract(1, 'days');
+	
 	
 	$(hero).find("responsetime").each(function(){
 		/*html += '<h5>Response Time</h5>';
@@ -276,6 +276,8 @@ function parseHero(hero, ID){
 							
 							// Sets the display format used in tooltip generation
 							tooltipFormat: 'HH:mm - dddd DD/MM/YYYY',
+							
+							min: suggestedmin,
 						},													
 						gridLines:{							
 							tickMarkLength: 10,
