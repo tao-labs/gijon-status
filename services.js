@@ -101,6 +101,8 @@ function parseHero(hero, ID){
 	var magnitude = 0;
 	
 	var latest = moment($(hero).find("responsetime").first().attr('datetime')).endOf('hour');
+	var suggestedmin = moment(latest).subtract(1, 'days');
+	console.log(suggestedmin);
 	
 	$(hero).find("responsetime").each(function(){
 		/*html += '<h5>Response Time</h5>';
@@ -271,8 +273,6 @@ function parseHero(hero, ID){
 								'quarter': '[Q]Q - YYYY', // Q3
 								'year': 'YYYY', // 2015
 							},
-							
-							min: moment(latest).subtract(1, 'days'),
 							
 							// Sets the display format used in tooltip generation
 							tooltipFormat: 'HH:mm - dddd DD/MM/YYYY',
