@@ -102,7 +102,7 @@ function parseHero(hero, ID){
 	
 	var latest = moment($(hero).find("responsetime").first().attr('datetime')).endOf('hour');
 	var suggestedmin = moment(latest).subtract(1, 'days');
-	console.log(suggestedmin);
+	console.log(suggestedmin.toDate());
 	
 	$(hero).find("responsetime").each(function(){
 		/*html += '<h5>Response Time</h5>';
