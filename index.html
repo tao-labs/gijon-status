@@ -7,9 +7,9 @@
 		<meta name="HandheldFriendly" content="True">
 		<meta name="MobileOptimized" content="320">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
-		<meta name="keywords" content="Status of the services of Gijón">
-		<meta name="description" content="Status of the services of Gijón">
-		<title>Estado de los Servicios - Ayuntamiento de Gijón</title>
+		<meta name="keywords" content="Status of the Nexus Services">
+		<meta name="description" content="Status of the Nexus Services">
+		<title>Estado de los Servicios - NEXUS (T-Systems)</title>
 		<link rel='shortcut icon' type='image/x-icon' href='T_favicon_p.ico' />
 		<link rel="shortcut icon" type="image/png" href="DTE_FAV_16x16_p.png"/>
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic">
@@ -38,6 +38,7 @@
 		<!--<script type="text/javascript" src="Chart.Scatter.min.js"></script>-->
 		<script type="text/javascript" src="moment-with-locales.min.js"></script>
 		<script type="text/javascript" src="services.config"></script>
+		<script type="text/javascript" src="issues.config"></script>
 		<script type="text/javascript" src="services.js"></script>
 		<!--<script type="text/javascript" src="fetch.js"></script>-->
 		
@@ -73,9 +74,20 @@
 			
 			<h2 class="service-status async"><i class="material-icons">loop</i></h2>
 			
+			<div id="issues" class="maincontent async">
+				<div class="section group">
+					<h3 id="issues-title">Notificaciones</h3>
+					<div class="issues-section font-regular">
+						<div class="components-container one-column">
+							 <!-- append issues here -->
+						</div>
+					</div>
+				</div>
+			</div>
+			
 			<!-- append heroes here -->
 			
-			<div class="maincontent async">
+			<div id="services" class="maincontent async">
 				<div class="section group">
 					<h3>Servicios</h3>
 					<div class="components-section font-regular">

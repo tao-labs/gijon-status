@@ -101,8 +101,6 @@ function parseHero(hero, ID){
 	var magnitude = 0;
 	
 	var latest = moment($(hero).find("responsetime").first().attr('datetime')).endOf('hour');
-	var suggestedmin = moment().subtract(12, 'hours');
-	
 	
 	$(hero).find("responsetime").each(function(){
 		/*html += '<h5>Response Time</h5>';
@@ -183,7 +181,7 @@ function parseHero(hero, ID){
 						
 		//Chart
 		bleed += '<div class="col span_1_of_1 chart">';
-		bleed += '<div><canvas width="600" height="200" id="chart-' + $(hero).attr('id') + '" ></canvas></div>';
+		bleed += '<div><canvas width="600" height="100" id="chart-' + $(hero).attr('id') + '" ></canvas></div>';
 		bleed += '</div>';
 		/*
 		bleed += '<div class="col span_1_of_4">';		
@@ -198,7 +196,8 @@ function parseHero(hero, ID){
 	
 	//Add to the DOM	
 	//$("#maincontent .section").append(html);
-	$("h2.service-status").after(bleed);
+	//$("h2.service-status").after(bleed);
+	$("#issues").after(bleed);
 	
 	//Draw chart
 	if(maxy>0){
@@ -246,7 +245,6 @@ function parseHero(hero, ID){
 						type: 'time',
 						position: "bottom",
 						time: {
-							
 							// string/callback - By default, date objects are expected. You may use a pattern string from http://momentjs.com/docs/#/parsing/string-format/ to parse a time string format, or use a callback function that is passed the label, and must return a moment() instance.
 							parser: false,
 							
@@ -277,7 +275,6 @@ function parseHero(hero, ID){
 							
 							// Sets the display format used in tooltip generation
 							tooltipFormat: 'HH:mm - dddd DD/MM/YYYY',
-							
 						},													
 						gridLines:{							
 							tickMarkLength: 10,
@@ -292,13 +289,14 @@ function parseHero(hero, ID){
 							autoSkip: true,
 							fontColor: '#d0d0d0',
 							maxRotation: 0,
-							min: suggestedmin,
-							suggestedMin: suggestedmin,
 							//maxTicksLimit: 26,
 						}
 					}],
 					yAxes: [{
-						display: false,					
+						display: false,
+						/*ticks: {
+				                    beginAtZero:true
+				                }*/
 					}]
 				},
 				tooltips: {
@@ -346,7 +344,7 @@ function getService(ID, Service, Count, CustomTime) {
 				} else if ($(this).attr('status') == 0) {
 					var direction = 'level';
 					var status = 'En mantenimiento';
-					var icon = 'blur_off';
+					var icon = 'blur_on';
 					statuses.paused ++;
 				} else if ($(this).attr('status') == 1) {
 					var direction = 'none';
@@ -410,7 +408,28 @@ function getService(ID, Service, Count, CustomTime) {
 								
 								html += '<div class="ratio-column span_1_of_' + (values.length + 2) +'"><h6 class="boxed noborder ' + direction + '">' + lastResponse + 'ms</h6><span>' + moment($(this).find("responsetime").first().attr('datetime')).fromNow() + '</span></div>';							
 								
-								for (i = 0; i < values.length; i++) { 
+								//Fix to ratios if in maintenance more than the ratio observed time
+								if($(this).attr('status') == 0){
+									
+									//Get latest maintenance time
+									var maintdate = $(this).find("log").first().attr('datetime');
+									var ranges = CustomTime.split('-');
+									
+									//If > 1 day, force values[0]=100, etc
+									for(i = 0; i < values.length; i++){
+										if(moment(maintdate).isBefore(moment().subtract(ranges[i], 'days'))){
+											values[i]=100;
+										}	
+									}
+
+								}
+								
+								for (i = 0; i < values.length; i++) {
+									if(i==0 && values[i]<1 && $(this).attr('status') == 0){
+										//values[i] = 100; //Fix: if monitor is paused for a day, this ratio will be broken
+										//Similar fixes should be done for weekly, monthly... but take into account the
+									}
+									
 									if (values[i] >= 99) {
 										var ratio = 'up';
 									} else if (values[i] >= 90) {
@@ -460,11 +479,11 @@ function getService(ID, Service, Count, CustomTime) {
 								} else if ($(this).attr('type') == 98) {
 									direction = 'level';
 									status ='Fin de tareas de mantenimiento';
-									icon = 'blur_on';
+									icon = 'blur_off';
 								} else if ($(this).attr('type') == 99) {
 									direction = 'level';
 									status = 'Inicio de tareas de mantenimiento';
-									icon = 'blur_off';
+									icon = 'blur_on';
 								} else {
 									direction = 'none';
 									status = 'No se ha podido determinar el estado del servicio';
@@ -531,19 +550,35 @@ function getService(ID, Service, Count, CustomTime) {
 						$("h2.service-status i").html("done_all");
 					}else if(statuses.down == services.length){
 						$("h2.service-status").addClass("down");
-						$("h2.service-status").prepend("Servicios no disponibles ");
+						$("h2.service-status").prepend("Todos los servicios no disponibles ");
 						$("h2.service-status i").html("clear");
-					}else if(statuses.maintenance == services.length){
+					}else if(statuses.paused == services.length){
 						$("h2.service-statusr").addClass("level");
 						$("h2.service-status").prepend("Realizando tareas de mantenimiento ");
 						$("h2.service-status i").html("flag");
 					}else if(statuses.difficulties == services.length){
 						$("h2.service-status").addClass("level");
-						$("h2.service-status").prepend("Experimentando dificultades ");
+						$("h2.service-status").prepend("Experimentando dificultades graves ");
+						$("h2.service-status i").html("flag");
+					}else if(statuses.down == 0 && statuses.difficulties == 0 && (statuses.up > (statuses.paused + statuses.unchecked))){
+						$("h2.service-status").addClass("up");
+						$("h2.service-status").prepend("Servicios disponibles sin afectaciones imprevistas ");
+						$("h2.service-status i").html("done");
+					}else if(statuses.down > statuses.up){
+						$("h2.service-status").addClass("level");
+						$("h2.service-status").prepend("Múltiples servicios no disponibles ");
+						$("h2.service-status i").html("flag");
+					}else if(statuses.paused > statuses.up){
+						$("h2.service-status").addClass("level");
+						$("h2.service-status").prepend("Múltiples servicios en mantenimiento ");
+						$("h2.service-status i").html("flag");
+					}else if(statuses.difficulties > statuses.up){
+						$("h2.service-status").addClass("level");
+						$("h2.service-status").prepend("Experimentando dificultades leves ");
 						$("h2.service-status i").html("flag");
 					}else{
-						$("h2.service-status").addClass("none");
-						$("h2.service-status").prepend("No se ha podido determinar ");
+						$("h2.service-status").addClass("level");
+						$("h2.service-status").prepend("Experimentando dificultades ");
 						$("h2.service-status i").html("flag");
 					}
 					
@@ -580,6 +615,13 @@ function getService(ID, Service, Count, CustomTime) {
 					//Show content
 					$("#spinner").fadeOut(function(){$(".async").fadeIn()});
 					
+					//Show issues
+					if(issues.length>0){
+						showIssues();
+					}else{
+						$("#issues").remove();	
+					}
+					
 				}			
 
 
@@ -589,6 +631,35 @@ function getService(ID, Service, Count, CustomTime) {
 	
 }
 
+function showIssues(){
+	
+	var html = '';
+	
+	$.each(issues, function(index, value){
+		
+		html += '<div class="component-container border-color">';
+					
+			html += '<div class="component-inner-container">';
+			
+				html += '<h5 class="center"><b>' + value.subject + '</b></h5>';
+
+				html += '<p class="center">'+ value.description + '</p>';
+				
+				html += '<i class="material-icons center">'+value.type+'</i>';
+				
+				html += '<h6 class="center">desde ' + moment(value.start).calendar() + ' hasta ' + moment(value.end).calendar() + '</h6>';
+	
+			html += '</div>';
+		
+		html += '</div>';
+		
+	});
+	
+	$(".issues-section .components-container").append(html);
+	$(".issues-section").fadeIn();
+	
+	
+}
 
 var CustomTime = "1-7-30-90";
 
@@ -603,10 +674,8 @@ var TimeTags = [
 var Title = 'Nexus';
 
 var statuses = { up: 0, down: 0, difficulties: 0, paused: 0, unchecked: 0}
-
 var averages = { daily: 0.0, weekly: 0.0, monthly: 0.0, quarterly: 0.0, alltime: 0.0}
 var weight = 0.0;
-
 
 $( document ).ready(function() {
 	console.log( "ready!" );
